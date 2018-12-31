@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ch">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>webapp-test</title>
+    <link rel="manifest" href="/manifest.json">
+    <script async src="/app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js').then(function (reg) {
+          // registration worked
+          console.log('Registration succeeded. Scope is ' + reg.scope);
+        }).catch(function (error) {
+          // registration failed
+          console.log('Registration failed with ' + error);
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app" ></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
