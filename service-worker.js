@@ -14,15 +14,34 @@ self.addEventListener('install', function (event) {
 })
 
 self.addEventListener('fetch', function (event) {
+  event.respondWith(
+    fetch(event.request).then(res => {
+      //console.log(res);
+      //console.log(caches.open("v1"))
 
-  event.respondWith(caches.match(event.request).then(res => {
-    console.log(event.request.url)
-    if (res) {
-      console.log('match');
-      return res;
-    }
-    return fetch(event.request);
-  }));
+      return caches.open('v1').then((cache)=>{
+        return cache.put(event.request,res.clone()).then(()=>{ return res;})
+      });
+
+    }).catch(function(res) {
+      console.log("catch")
+      console.log("catch" , res)
+
+      console.log(caches.match(event.request))
+
+      // return caches.match(event.request).;
+      return caches.match(event.request).then((res)=>{
+        console.log(res)
+        console.log( /\.json$/g.test(event.request.url))
+        if (!res){
+          return new Response("Response body", {
+            headers: { "Content-Type" : "text/plain" }
+          });
+        }
+        return res
+      });
+    })
+  );
 })
 
 self.addEventListener('activate', function (e) {

@@ -79,6 +79,9 @@
           awesome-vue
         </a>
       </li>
+      <li>
+        <router-link to="/page1" >test page </router-link>
+      </li>
     </ul>
   </div>
 </template>
