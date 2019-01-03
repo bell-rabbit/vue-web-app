@@ -17,6 +17,10 @@ export default {
     const self = this
     $.getJSON('/common/data/data.json').done(function (data) {
       console.log(data)
+      if (data.status === 'offline') {
+        alert('offline')
+      }
+
       self.list = data.data
     })
   }

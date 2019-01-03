@@ -24,21 +24,32 @@ self.addEventListener('fetch', function (event) {
       });
 
     }).catch(function(res) {
-      console.log("catch")
-      console.log("catch" , res)
-
-      console.log(caches.match(event.request))
-
       // return caches.match(event.request).;
       return caches.match(event.request).then((res)=>{
-        console.log(res)
-        console.log( /\.json$/g.test(event.request.url))
-        if (!res){
-          return new Response("Response body", {
-            headers: { "Content-Type" : "text/plain" }
-          });
+        if (!res || !res.headers){
+
+          switch (true) {
+
+            case /\.json$/g.test(event.request.url):
+              return new Response("{\"status\":\"offline\"}", {
+                headers: { "Content-Type" : "application/json; charset=utf-8" }
+              });
+
+            case /\.html$/g.test(event.request.url):
+              return new Response("not caches", {
+                headers: { "Content-Type" : "text/plain" }
+              });
+
+            default:
+              return new Response("not caches", {
+                headers: { "Content-Type" : "text/plain" }
+              });
+          }
         }
         return res
+      }).catch((ex)=>{
+        console.log(ex)
+
       });
     })
   );
@@ -57,3 +68,4 @@ self.addEventListener('activate', function (e) {
     })
   )
 })
+
